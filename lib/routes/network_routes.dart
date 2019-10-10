@@ -65,7 +65,7 @@ class APIRoutes {
   }
 
   static dynamic getUser() async {
-    return await NetworkUtils.fetch("/api/user");
+    return await NetworkUtils.fetch("/users");
   }
 
   static dynamic getFeed() async {

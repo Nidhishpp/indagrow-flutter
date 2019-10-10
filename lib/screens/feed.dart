@@ -22,7 +22,7 @@ class _FeedPageState extends State<FeedPage> {
     var jsonData = await APIRoutes.getFeed();
     try {
       print(jsonData['data'].toString());
-      setState(() => responseData = jsonData);
+      setState(() => responseData = jsonData['data']);
       if (jsonData['status'] != 'error') {
       } else {
         _scaffoldKey.currentState.showSnackBar(
@@ -44,14 +44,14 @@ class _FeedPageState extends State<FeedPage> {
       key: _scaffoldKey,
       backgroundColor: Colors.lightBlue[50],
       body: SafeArea(
-        child: ListView.builder(
+        child: responseData != null ?ListView.builder(
           itemCount: responseData.length ?? 0,
           padding: EdgeInsets.all(5.0),
           itemBuilder: (BuildContext context, int i) {
             return Center(
               child: Container(
                 child: InkWell(
-                  onTap: () => Navigator.of(context).pushNamed('/feedDetails',arguments: responseData[i]['_id'].toString()),
+                  onTap: () => Navigator.of(context).pushNamed('/feedDetails'),
                   child: Card(
                     elevation: 5.0,
                     child: Padding(
@@ -102,7 +102,7 @@ class _FeedPageState extends State<FeedPage> {
               ),
             );
           },
-        ),
+        ) : Text("Data Loading..."),
       ),
     );
   }
