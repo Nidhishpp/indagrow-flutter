@@ -52,7 +52,8 @@ class NetworkUtils {
       final response = await http.get(
         _host + _endPoint,
         headers: {
-          'Authorization': _authToken,
+          'token': _authToken,
+          'refreshtoken': _authToken,
           'Accept': 'application/json',
         },
       );

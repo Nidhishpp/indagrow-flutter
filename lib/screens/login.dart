@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // fetchSessionAndNavigate();
+    fetchSessionAndNavigate();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     setState(() => _buttonLoader = _loginButton());

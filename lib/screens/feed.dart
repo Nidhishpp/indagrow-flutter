@@ -15,111 +15,84 @@ class _FeedPageState extends State<FeedPage> {
   @override
   void initState() {
     super.initState();
-    // _user();
+    _feed();
   }
 
-  // Future<void> _user() async {
-  //   var jsonData = await APIRoutes.getUser();
-  //   try {
-  //     if (jsonData['status'] != 'error') {
-  //       setState(() => responseData = jsonData);
-  //       if (responseData['current'] == 'clue') {
-  //         Navigator.of(context).pushReplacementNamed('/clue');
-  //       } else if (responseData['current'] == 'activity') {
-  //         Navigator.of(context).pushReplacementNamed('/activity');
-  //       }
-  //     } else {
-  //       if (jsonData['type'] == 'unauthenticated') {
-  //         _logout();
-  //       } else {
-  //         _scaffoldKey.currentState.showSnackBar(
-  //           SnackBar(
-  //             content: Text(jsonData['message'].toString()),
-  //             duration: Duration(seconds: 3),
-  //           ),
-  //         );
-  //       }
-  //     }
-  //   } catch (e) {}
-  // }
+  Future<void> _feed() async {
+    var jsonData = await APIRoutes.getFeed();
+    try {
+      print(jsonData['data'].toString());
+      setState(() => responseData = jsonData);
+      if (jsonData['status'] != 'error') {
+      } else {
+        _scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            content: Text(jsonData['message'].toString()),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    } catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Feed'),
+        title: Text('Feed'),
       ),
       key: _scaffoldKey,
       backgroundColor: Colors.lightBlue[50],
       body: SafeArea(
         child: ListView.builder(
-          itemCount: 10,
+          itemCount: responseData.length ?? 0,
           padding: EdgeInsets.all(5.0),
           itemBuilder: (BuildContext context, int i) {
-            // return CustomListCard(
-            //   leadingIcon: Icon(Icons.add),
-            //   cardTitle: Text("Feed Title"),
-            //   cardSubtitle: Text("Mark the attendance using form"),
-            //   onTap: () {},
-            // );
             return Center(
               child: Container(
                 child: InkWell(
-                  onTap: () => Navigator.of(context).pushNamed('/feedDetails'),
+                  onTap: () => Navigator.of(context).pushNamed('/feedDetails',arguments: responseData[i]['_id'].toString()),
                   child: Card(
                     elevation: 5.0,
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
+                      padding: EdgeInsets.all(10.0),
+                      child: Column(
                         children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Hero(
-                                  tag: i,
-                                  child: Text(
-                                    'Title',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 24.0,
-                                    ),
-                                  ),
-                                ),
+                          Container(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              responseData[i]['title'].toString(),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 20.0,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Tags(
-                                  itemCount: 1,
-                                  itemBuilder: (int index) {
-                                    return ItemTags(
-                                      activeColor: Colors.red,
-                                      pressEnabled: false,
-                                      title: "title",
-                                      index: 1,
-                                    );
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'time',
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 18.0,
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.arrow_forward_ios),
+                            padding: EdgeInsets.all(8.0),
+                            child: Tags(
+                              itemCount: 1,
+                              itemBuilder: (int index) {
+                                return ItemTags(
+                                  activeColor: Colors.red,
+                                  pressEnabled: false,
+                                  title: responseData[i]['tag'].toString(),
+                                  index: 1,
+                                );
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              responseData[i]['author'].toString(),
+                              style: TextStyle(
+                                color: Colors.black.withOpacity(0.5),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18.0,
+                              ),
+                            ),
                           ),
                         ],
                       ),

@@ -40,6 +40,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => FeedPage());
 
       case '/feedDetails':
+        var data = settings.arguments;
         return MaterialPageRoute(builder: (_) => FeedDetailsPage());
 
       case '/blog':

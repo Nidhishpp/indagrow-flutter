@@ -68,8 +68,8 @@ class APIRoutes {
     return await NetworkUtils.fetch("/api/user");
   }
 
-  static dynamic getClue() async {
-    return await NetworkUtils.fetch("/api/clue");
+  static dynamic getFeed() async {
+    return await NetworkUtils.fetch("/forums/");
   }
 
   static dynamic getActivity() async {
